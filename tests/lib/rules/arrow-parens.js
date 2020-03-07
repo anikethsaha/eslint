@@ -68,7 +68,11 @@ const valid = [
     { code: "async a => ({})", options: ["as-needed", { requireForBlockBody: true }], parserOptions: { ecmaVersion: 8 } },
     { code: "async a => a", options: ["as-needed", { requireForBlockBody: true }], parserOptions: { ecmaVersion: 8 } },
     { code: "(a: T) => a", options: ["as-needed", { requireForBlockBody: true }], parser: parser("identifer-type") },
-    { code: "(a): T => a", options: ["as-needed", { requireForBlockBody: true }], parser: parser("return-type") }
+    { code: "(a): T => a", options: ["as-needed", { requireForBlockBody: true }], parser: parser("return-type") },
+
+
+    // "as-needed", { "requireCommentsParams": true }
+    { code: "const f = (/** @type {number} */a) => a + a;", options: ["as-needed", { requireCommentsParams: true }] }
 ];
 
 const type = "ArrowFunctionExpression";
