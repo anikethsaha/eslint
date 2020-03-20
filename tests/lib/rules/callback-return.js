@@ -38,6 +38,27 @@ ruleTester.run("callback-return", rule, {
         "function x() { for(x = 0; x < 10; x++) { return next(); } }",
         "function x() { while(x) { return next(); } }",
         "function a(err) { if (err) { obj.method (err); } }",
+        "var fn = function(cb) { var bar = cb() }",
+        {
+            code: "function a(err, callback) { const foo = callback() }",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
+            code: "const fn = (next) => bar = next() ",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
+            code: `const mutate = (obj, key, callback) => {
+                obj[key] = callback(obj[key]);
+            };`,
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
+            code: `const mutate = (callback) => {
+                var foo = callback();
+            };`,
+            parserOptions: { ecmaVersion: 6 }
+        },
 
         // callback() all you want outside of a function
         "callback()",

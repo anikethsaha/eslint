@@ -52,6 +52,15 @@ function foo(err, callback) {
     }
     callback();
 }
+
+
+function foo(err, cb){
+    var bar = cb()
+}
+
+function fn(obj, next){
+    obj = next()
+}
 ```
 
 ### Supplied callback names
