@@ -23,21 +23,9 @@ ruleTester.run("no-useless-else", rule, {
         "function foo() { if (true) { if (false) { return x; } } else { return y; } }",
         "function foo() { if (true) { return x; } return y; }",
         "function foo() { if (true) { for (;;) { return x; } } else { return y; } }",
-        "function foo() { var x = true; if (x) { return x; } else if (x === false) { return false; } }",
         "function foo() { if (true) notAReturn(); else return y; }",
         "function foo() {if (x) { notAReturn(); } else if (y) { return true; } else { notAReturn(); } }",
-        "function foo() {if (x) { return true; } else if (y) { notAReturn() } else { notAReturn(); } }",
-        "if (0) { if (0) {} else {} } else {}",
-        `function foo() {
-                    while (true) {
-                        if (bar) break;
-                        else if (baz) continue;
-                        else if (qux) throw new Baseball();
-                        else if (boop) return 5;
-                        else beep();
-                    }
-                }
-            `
+        "if (0) { if (0) {} else {} } else {}"
     ],
     invalid: [
         {
@@ -79,7 +67,7 @@ ruleTester.run("no-useless-else", rule, {
         },
         {
             code: "function foo9() {if (x) { return true; } else if (y) { return true; } else { notAReturn(); } }",
-            errors: [{ message: "Using 'else' is unnecessary here.", type: "BlockStatement" }]
+            errors: [{ message: "Using 'else' is unnecessary here.", type: "IfStatement" }]
         },
         {
             code: "function foo10() { if (foo) return bar; else (foo).bar(); }",
@@ -124,6 +112,31 @@ ruleTester.run("no-useless-else", rule, {
         {
             code: "while (true) { if (foo) break; else bar() }",
             errors: [{ message: "Using 'else' is unnecessary here.", type: "ExpressionStatement" }]
+        },
+        {
+            code: "function foo() { var x = true; if (x) { return x; } else if (x === false) { return false; } }",
+            errors: [{ message: "Using 'else' is unnecessary here.", type: "IfStatement" }]
+        },
+        {
+            code: `function foo() {
+                    while (true) {
+                        if (bar) break;
+                        else if (baz) continue;
+                        else if (qux) throw new Baseball();
+                        else if (boop) return 5;
+                        else beep();
+                    }
+                }
+            `,
+            errors: [
+                { message: "Using 'else' is unnecessary here.", type: "IfStatement" },
+                { message: "Using 'else' is unnecessary here.", type: "IfStatement" },
+                { message: "Using 'else' is unnecessary here.", type: "IfStatement" }
+            ]
+        },
+        {
+            code: "function foo() {if (x) { return true; } else if (y) { notAReturn() } else { notAReturn(); } }",
+            errors: [{ message: "Using 'else' is unnecessary here.", type: "IfStatement" }]
         }
 
     ]
